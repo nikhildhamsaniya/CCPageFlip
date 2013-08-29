@@ -27,6 +27,8 @@
 #import "CCTransitionPageTurn.h"
 #import	"CCActionPageTurn3D.h"
 #import "CCDirector.h"
+#import "CCActionInterval.h"
+#import "CCActionInstant.h"
 
 @implementation CCTransitionPageTurn
 
@@ -79,7 +81,6 @@
 		[_outScene runAction: [CCSequence actions:
 							  action,
 							  [CCCallFunc actionWithTarget:self selector:@selector(finish)],
-							  [CCStopGrid action],
 							  nil]
 		 ];
 	}
@@ -91,7 +92,6 @@
 							 [CCShow action],
 							 action,
 							 [CCCallFunc actionWithTarget:self selector:@selector(finish)],
-							 [CCStopGrid action],
 							 nil]
 		 ];
 	}
@@ -100,6 +100,8 @@
 
 -(CCActionInterval*) actionWithSize: (CGSize) v
 {
+    return nil;
+    /*
 	if( _back )
 	{
 		// Get hold of the PageTurn3DAction
@@ -111,6 +113,7 @@
 		// Get hold of the PageTurn3DAction
 		return [CCPageTurn3D actionWithDuration:_duration size:v];
 	}
+    */
 }
 
 @end

@@ -209,6 +209,7 @@ typedef void (*GLLogFunction) (GLuint program,
 	_uniforms[kCCUniformRandom01] = glGetUniformLocation(_program, kCCUniformRandom01_s);
 
 	_uniforms[kCCUniformSampler] = glGetUniformLocation(_program, kCCUniformSampler_s);
+	_uniforms[kCCUniformSampler2] = glGetUniformLocation(_program, kCCUniformSampler2_s);
 
 	_flags.usesMVP = _uniforms[kCCUniformMVPMatrix] != -1;
 	_flags.usesMV = (_uniforms[kCCUniformMVMatrix] != -1 && _uniforms[kCCUniformPMatrix] != -1 );
@@ -224,6 +225,7 @@ typedef void (*GLLogFunction) (GLuint program,
 	
 	// Since sample most probably won't change, set it to 0 now.
 	[self setUniformLocation:_uniforms[kCCUniformSampler] withI1:0];
+	[self setUniformLocation:_uniforms[kCCUniformSampler2] withI1:1];
 }
 
 #pragma mark -

@@ -32,6 +32,8 @@
 #import "CCGLProgram.h"
 #import "CCShaderCache.h"
 #import "ccGLStateCache.h"
+#import "CCFileUtils.h"
+#import "CCGLProgram.h"
 
 #import "Platforms/CCGL.h"
 #import "Support/CGPointExtension.h"
@@ -86,7 +88,31 @@
 		_grabber = [[CCGrabber alloc] init];
 		[_grabber grab:_texture];
 
-		self.shaderProgram = [[CCShaderCache sharedShaderCache] programForKey:kCCShader_PositionTexture];
+        //
+        // Position, Color shader
+        //
+
+        NSString *fragmentFilename = [[CCFileUtils sharedFileUtils] fullPathForFilename:@"ccShader_Grid_frag.glsl"];
+        NSString *fragmentShaderString = [NSString stringWithContentsOfFile:fragmentFilename encoding:NSASCIIStringEncoding error:nil];
+        const char *fragmentShader = [fragmentShaderString UTF8String];
+        NSString *vertexFilename = [[CCFileUtils sharedFileUtils] fullPathForFilename:@"ccShader_Grid_vert.glsl"];
+        NSString *vertexShaderString = [NSString stringWithContentsOfFile:vertexFilename encoding:NSASCIIStringEncoding error:nil];
+        const char *vertexShader = [vertexShaderString UTF8String];
+
+        CCGLProgram *p = [CCGLProgram programWithVertexShaderByteArray:vertexShader
+                                           fragmentShaderByteArray:fragmentShader];
+        [p addAttribute:kCCAttributeNamePosition index:kCCVertexAttrib_Position];
+        [p addAttribute:kCCAttributeNameColor index:kCCVertexAttrib_Color];
+        [p addAttribute:@"theta" index:kCCVertexAttrib_Color];
+
+        [p link];
+        [p updateUniforms];
+
+        CHECK_GL_ERROR_DEBUG();
+
+        [[CCShaderCache sharedShaderCache] addProgram:p forKey:@"test"];
+		self.shaderProgram = p;
+        // [p release];
 
 		[self calculateVertexPoints];
 	}
@@ -97,7 +123,7 @@
 {
 	CCDirector *director = [CCDirector sharedDirector];
 	CGSize s = [director winSizeInPixels];
-
+    s = CGSizeMake(200, 200);
 
 	unsigned long POTWide = ccNextPOT(s.width);
 	unsigned long POTHigh = ccNextPOT(s.height);
@@ -181,23 +207,21 @@
 }
 
 -(void)set2DProjection
-{	
+{
 	CCDirector *director = [CCDirector sharedDirector];
-
-	CGSize	size = [director winSizeInPixels];
-	
+	CGSize size = [director winSizeInPixels];
 	glViewport(0, 0, size.width, size.height);
+
 	kmGLMatrixMode(KM_GL_PROJECTION);
 	kmGLLoadIdentity();
 	
 	kmMat4 orthoMatrix;
-	kmMat4OrthographicProjection(&orthoMatrix, 0, size.width, 0, size.height, -1, 1);
+	kmMat4OrthographicProjection(&orthoMatrix, -size.width, size.width, 0, size.height, -1, 1);
 	kmGLMultMatrix( &orthoMatrix );
-	
+
 	kmGLMatrixMode(KM_GL_MODELVIEW);
 	kmGLLoadIdentity();
 
-	
 	ccSetProjectionMatrixDirty();
 }
 
@@ -211,7 +235,6 @@
 //	[director setProjection:kCCDirectorProjection2D];
 	[self set2DProjection];
 
-	
 	[_grabber beforeRender:_texture];
 }
 
@@ -293,7 +316,8 @@
 	glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, _texCoordinates);
 
 	glDrawElements(GL_TRIANGLES, (GLsizei) n*6, GL_UNSIGNED_SHORT, _indices);
-	
+
+
 	CC_INCREMENT_GL_DRAWS(1);
 }
 

@@ -68,7 +68,7 @@
 	glGetFloatv(GL_COLOR_CLEAR_VALUE,oldClearColor_);
 
 	// BUG XXX: doesn't work with RGB565.
-	glClearColor(0,0,0,0);
+	glClearColor(0,255,0,0);
 
 	// BUG #631: To fix #631, uncomment the lines with #631
 	// Warning: But it CCGrabber won't work with 2 effects at the same time

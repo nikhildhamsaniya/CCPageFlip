@@ -11,11 +11,13 @@
 
 // When you import this file, you import all the cocos2d classes
 #import "cocos2d.h"
+#import "CCPage.h"
 
 // HelloWorldLayer
-@interface HelloWorldLayer : CCLayer <GKAchievementViewControllerDelegate, GKLeaderboardViewControllerDelegate>
-{
-}
+@interface HelloWorldLayer : CCLayer 
+
+@property (nonatomic, strong) CCActionInterval *pageFlip;
+@property (nonatomic, strong) CCPage *page;
 
 // returns a CCScene that contains the HelloWorldLayer as the only child
 +(CCScene *) scene;

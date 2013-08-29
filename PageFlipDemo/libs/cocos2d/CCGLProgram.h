@@ -48,6 +48,7 @@ enum {
 	kCCUniformCosTime,
 	kCCUniformRandom01,
 	kCCUniformSampler,
+	kCCUniformSampler2,
 
 	kCCUniform_MAX,
 };
@@ -70,6 +71,7 @@ enum {
 #define kCCUniformCosTime_s				"CC_CosTime"
 #define kCCUniformRandom01_s			"CC_Random01"
 #define kCCUniformSampler_s				"CC_Texture0"
+#define kCCUniformSampler2_s			"CC_Texture1"
 #define kCCUniformAlphaTestValue_s		"CC_AlphaValue"
 
 // Attribute names
