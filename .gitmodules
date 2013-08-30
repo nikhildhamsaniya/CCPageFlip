@@ -1,0 +1,3 @@
+[submodule "PageFlipDemo/CCBReader"]
+	path = PageFlipDemo/CCBReader
+	url = https://github.com/cocos2d/CCBReader
